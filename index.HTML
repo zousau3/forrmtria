@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>FORMULÁRIO TRIAGEM</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+  label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 6px; /* espaçamento entre label e o próximo conteúdo */
+    font-weight: bold;
+  }
+  .checkbox-group, .radio-group {
+    margin-left: 20px;
+    margin-bottom: 20px; /* espaçamento entre grupos */
+  }
+  textarea { width: 100%; height: 60px; }
+  button { margin-top: 15px; padding: 10px 20px; font-size: 16px; }
+  pre { background: #222; color: #0f0; padding: 15px; margin-top: 20px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+
+<h2>TRIAGEM DE OM</h2>
+
+<form id="triagemForm">
+
+  <label>1. APOIO DE OUTRA DISCIPLINA (MARQUE AS OPÇÕES):</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="apoio" value="CAL" /> CAL</label>
+    <label><input type="checkbox" name="apoio" value="MAD ACIMA DE 2M" /> MAD ACIMA DE 2M</label>
+    <label><input type="checkbox" name="apoio" value="MAD 2M" /> MAD 2M</label>
+    <label><input type="checkbox" name="apoio" value="TME" /> TME</label>
+    <label><input type="checkbox" name="apoio" value="TMI" /> TMI</label>
+    <label><input type="checkbox" name="apoio" value="TMM" /> TMM</label>
+    <label><input type="checkbox" name="apoio" value="MOV DE CARGAS" /> MOV DE CARGAS</label>
+  </div>
+
+  <label>2. ACESSO POR CORDAS E/OU ESCALADA:</label>
+  <div class="checkbox-group" style="margin-bottom: 6px;">
+    <label><input type="checkbox" name="acessoEscalada" value="ACESSO POR CORDAS" /> ACESSO POR CORDAS</label>
+    <label><input type="checkbox" name="acessoEscalada" value="ESCALADA" /> ESCALADA</label>
+  </div>
+  <div class="radio-group" style="margin-bottom: 20px;">
+    <label><input type="radio" name="acessoEscaladaNao" value="NÃO" checked /> NÃO</label>
+  </div>
+
+  <label>3. LIBRA (MARQUE AS OPÇÕES):</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="libra" value="ELETRICO" /> ELETRICO</label>
+    <label><input type="checkbox" name="libra" value="PRESSURIZADO" /> PRESSURIZADO</label>
+    <label><input type="checkbox" name="libra" value="PARTES MÓVEIS" /> PARTES MÓVEIS</label>
+    <label><input type="checkbox" name="libra" value="ISOLAMENTO POSITIVO RAQUETEAMENTO E DESRAQUETEAMENTO" /> ISOLAMENTO POSITIVO RAQUETEAMENTO E DESRAQUETEAMENTO</label>
+    <label><input type="checkbox" name="libra" value="NBE NECESSITA DE BLOQUEIO ELÉTRICO" /> NBE NECESSITA DE BLOQUEIO ELÉTRICO</label>
+    <label><input type="checkbox" name="libra" value="TRABALHOS COM PLANO DE ISOLAMENTO ATIVO" /> TRABALHOS COM PLANO DE ISOLAMENTO ATIVO</label>
+    <label><input type="checkbox" name="libra" value="PRESSURIZADO SEM QUEBRA DE INTEGRIDADE" /> PRESSURIZADO SEM QUEBRA DE INTEGRIDADE</label>
+  </div>
+
+  <label>4. FERRAMENTAS QUENTES E/OU FRIAS:</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="ferramentas" value="QUENTES" /> QUENTES</label>
+    <label><input type="checkbox" name="ferramentas" value="FRIAS" /> FRIAS</label>
+  </div>
+
+  <label>5. IMPACTA SENSOR:</label>
+  <div class="radio-group">
+    <label><input type="radio" name="impacta" value="SIM" required /> SIM</label>
+    <label><input type="radio" name="impacta" value="NÃO" /> NÃO</label>
+  </div>
+  
+  <label>6. MATERIAIS NECESSÁRIOS:</label>
+  <div class="radio-group">
+    <label><input type="radio" name="materiais" value="EM ESTOQUE" required /> EM ESTOQUE</label>
+    <label><input type="radio" name="materiais" value="ARM RIO" /> ARM RIO</label>
+    <label><input type="radio" name="materiais" value="EM FALTA" /> EM FALTA</label>
+  </div>
+
+  <label>7. LOCAL EXATO (APLAT):</label>
+  <textarea name="local" placeholder="EXEMPLO: M01 2nd Deck - Z-301"></textarea>
+
+  <label>8. OBSERVAÇÃO:</label>
+  <textarea name="obs" placeholder="INTRODUZA A SUA RESPOSTA"></textarea>
+
+  <button type="submit">SUBMETER</button>
+</form>
+
+<pre id="resultado"></pre>
+
+<script>
+document.getElementById('triagemForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+
+  // PEGAR DATA ATUAL
+  const data = new Date();
+  const dataFormatada = data.toLocaleDateString('pt-BR');
+
+  // APOIO DE OUTRA DISCIPLINA
+  const apoioChecks = Array.from(form.querySelectorAll('input[name="apoio"]:checked'))
+    .map(el => el.value.toUpperCase());
+
+  // ACESSO POR CORDAS E/OU ESCALADA
+  const acessoChecks = Array.from(form.querySelectorAll('input[name="acessoEscalada"]:checked'))
+    .map(el => el.value.toUpperCase());
+  const acessoNao = form.querySelector('input[name="acessoEscaladaNao"]:checked').value.toUpperCase();
+
+  // LIBRA
+  const libraChecks = Array.from(form.querySelectorAll('input[name="libra"]:checked'))
+    .map(el => el.value.toUpperCase());
+
+  // FERRAMENTAS
+  const ferramentasChecks = Array.from(form.querySelectorAll('input[name="ferramentas"]:checked'))
+    .map(el => el.value.toUpperCase());
+
+  // IMPACTA SENSOR
+  const impacta = form.querySelector('input[name="impacta"]:checked').value.toUpperCase();
+
+  // LOCAL E OBS
+  const local = form.elements['local'].value.trim().toUpperCase();
+  const obs = form.elements['obs'].value.trim().toUpperCase();
+
+  // MATERIAIS NECESSÁRIOS
+  const materiais = form.querySelector('input[name="materiais"]:checked').value.toUpperCase();
+
+  // MONTA TEXTO
+  let resultado = "-------------------------------------------------\n";
+  resultado += "ORDEM TRIADA - " + dataFormatada + "\n\n";
+
+  if (apoioChecks.length > 0) {
+    resultado += "- APOIO DE OUTRA DISCIPLINA: " + apoioChecks.join(', ') + "\n";
+  }
+
+  // Se NÃO estiver marcado "NÃO", mostra os marcados
+  if (acessoNao !== "NÃO") {
+    if (acessoChecks.length > 0) {
+      resultado += "- ACESSO POR CORDAS E/OU ESCALADA: " + acessoChecks.join(', ') + "\n";
+    }
+  }
+
+  if (libraChecks.length > 0) {
+    resultado += "- LIBRA: " + libraChecks.join(', ') + "\n";
+  }
+
+  if (ferramentasChecks.length > 0) {
+    resultado += "- USO DE FERRAMENTAS: " + ferramentasChecks.join(', ') + "\n";
+  }
+
+  if (impacta === "SIM") {
+    resultado += "- IMPACTA SENSOR: SIM\n";
+  }
+  
+  if (materiais) {
+    resultado += "- MATERIAIS NECESSÁRIOS: " + materiais + "\n";
+  }
+
+  if (local) {
+    resultado += "\n- LOCAL: " + local + "\n";
+  }
+
+  if (obs) {
+    resultado += "- OBSERVAÇÃO: " + obs + "\n";
+  }
+
+  resultado += "-------------------------------------------------";
+
+  document.getElementById('resultado').textContent = resultado;
+});
+</script>
+
+</body>
+</html>
