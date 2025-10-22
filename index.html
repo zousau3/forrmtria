@@ -32,21 +32,22 @@
     <label><input type="checkbox" name="apoio" value="CAL" /> CAL</label>
     <label><input type="checkbox" name="apoio" value="MAD ACIMA DE 2M" /> MAD ACIMA DE 2M</label>
     <label><input type="checkbox" name="apoio" value="MAD 2M" /> MAD 2M</label>
+    <label><input type="checkbox" name="apoio" value="TMA" /> TMA</label>
     <label><input type="checkbox" name="apoio" value="TME" /> TME</label>
     <label><input type="checkbox" name="apoio" value="TMI" /> TMI</label>
     <label><input type="checkbox" name="apoio" value="TMM" /> TMM</label>
     <label><input type="checkbox" name="apoio" value="MOV DE CARGAS" /> MOV DE CARGAS</label>
   </div>
 
-  <label>2. ACESSO POR CORDAS E/OU ESCALADA:</label>
+  <label>2. ACESSO POR CORDAS E/OU USO DE ESCADA:</label>
   <div class="radio-group">
-    <label><input type="radio" name="acessoEscaladaOption" value="SIM" /> SIM</label>
-    <label><input type="radio" name="acessoEscaladaOption" value="NÃO" checked /> NÃO</label>
+    <label><input type="radio" name="acessoUSO DE ESCADAOption" value="SIM" /> SIM</label>
+    <label><input type="radio" name="acessoUSO DE ESCADAOption" value="NÃO" checked /> NÃO</label>
   </div>
 
   <div id="acessoCheckboxes" class="checkbox-group hidden">
     <label><input type="checkbox" name="acessoTipo" value="ACESSO POR CORDAS" /> ACESSO POR CORDAS</label>
-    <label><input type="checkbox" name="acessoTipo" value="ESCALADA" /> ESCALADA</label>
+    <label><input type="checkbox" name="acessoTipo" value="USO DE ESCADA" /> USO DE ESCADA</label>
   </div>
 
   <label>3. LIBRA (MARQUE AS OPÇÕES):</label>
@@ -97,7 +98,7 @@
 
   // Mostrar/ocultar checkboxes conforme seleção SIM/NÃO
   function updateAcessoVisibility() {
-    const acessoOption = form.querySelector('input[name="acessoEscaladaOption"]:checked');
+    const acessoOption = form.querySelector('input[name="acessoUSO DE ESCADAOption"]:checked');
     const valor = acessoOption ? acessoOption.value.toUpperCase() : 'NÃO';
     if (valor === 'SIM') {
       acessoCheckboxesContainer.classList.remove('hidden');
@@ -109,7 +110,7 @@
   }
 
   // ligar listeners aos radios de acesso
-  Array.from(form.querySelectorAll('input[name="acessoEscaladaOption"]')).forEach(r => {
+  Array.from(form.querySelectorAll('input[name="acessoUSO DE ESCADAOption"]')).forEach(r => {
     r.addEventListener('change', updateAcessoVisibility);
   });
 
@@ -127,8 +128,8 @@
     const apoioChecks = Array.from(form.querySelectorAll('input[name="apoio"]:checked'))
       .map(el => el.value.toUpperCase());
 
-    // ACESSO POR CORDAS E/OU ESCALADA
-    const acessoOptionEl = form.querySelector('input[name="acessoEscaladaOption"]:checked');
+    // ACESSO POR CORDAS E/OU USO DE ESCADA
+    const acessoOptionEl = form.querySelector('input[name="acessoUSO DE ESCADAOption"]:checked');
     const acessoOption = acessoOptionEl ? acessoOptionEl.value.toUpperCase() : 'NÃO';
     const acessoChecks = acessoOption === 'SIM'
       ? Array.from(form.querySelectorAll('input[name="acessoTipo"]:checked')).map(el => el.value.toUpperCase())
@@ -164,9 +165,9 @@
 
     if (acessoOption === "SIM") {
       if (acessoChecks.length > 0) {
-        resultado += "- ACESSO POR CORDAS E/OU ESCALADA: " + acessoChecks.join(', ') + "\n";
+        resultado += "- ACESSO POR CORDAS E/OU USO DE ESCADA: " + acessoChecks.join(', ') + "\n";
       } else {
-        resultado += "- ACESSO POR CORDAS E/OU ESCALADA: SIM (TIPO NÃO SELECIONADO)\n";
+        resultado += "- ACESSO POR CORDAS E/OU USO DE ESCADA: SIM (TIPO NÃO SELECIONADO)\n";
       }
     }
 
